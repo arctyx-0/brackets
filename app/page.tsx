@@ -132,11 +132,11 @@ export default function Bracket() {
       <div className="grid grid-cols-32 grid-rows-19 flex-grow border border-zinc-800 relative bg-black">
 
         <div className='col-start-1 col-end-23 row-span-1 float place-items-center align-items-center bg-gray-800'>
-            <p className='text-5xl sm:text-3xl'>Upper Bracket</p>
+            <p className='text-5xl'>Upper Bracket</p>
         </div>
         
         <div className='col-start-23 col-end-33 row-span-1 float place-items-center align-items-center bg-red-950'>
-            <p className='text-5xl sm:text-3xl'>Lower Bracket</p>
+            <p className='text-5xl'>Lower Bracket</p>
         </div>
 
         <p className="col-start-1 row-start-3 self-center text-center">1</p>
