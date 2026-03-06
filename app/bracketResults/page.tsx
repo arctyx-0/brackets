@@ -72,7 +72,7 @@ export default function Leaderboard() {
     <div className="min-h-screen bg-black text-white p-8">
       {!keyFound && (
         <div className="bg-orange-900/30 border border-orange-500 p-4 mb-6 rounded text-orange-200">
-          No "key" bracket found. Rankings are currently unavailable.
+          No key bracket found. I'll update it after every match.
         </div>
       )}
 

@@ -107,6 +107,7 @@ export default function Bracket() {
           m1: null, m2: null, m3: null, m4: null, m5: null, m6: null, m7: null,
           m8: null, m9: null, m10: null, m11: null, m12: null, m13: null, m14: null
         });
+        window.location.assign("/bracketResults")
 
     } catch (e) {
         console.error(e);
