@@ -93,6 +93,10 @@ export default function Bracket() {
       user: userName,
       bracket: { teams, winners }
     };
+    const button = document.getElementById('submitButton') as HTMLButtonElement | null;
+    if (button){
+      button.disabled = true
+    }
     try {
         await Submit(submissionData);
         console.log("submitted");
@@ -132,11 +136,11 @@ export default function Bracket() {
       <div className="grid grid-cols-32 grid-rows-19 flex-grow border border-zinc-800 relative bg-black">
 
         <div className='col-start-1 col-end-23 row-span-1 float place-items-center align-items-center bg-gray-800'>
-            <p className='text-2xl'>Upper Bracket</p>
+            <p className='text-5xl sm:text-3xl'>Upper Bracket</p>
         </div>
         
         <div className='col-start-23 col-end-33 row-span-1 float place-items-center align-items-center bg-red-950'>
-            <p className='text-2xl'>Lower Bracket</p>
+            <p className='text-5xl sm:text-3xl'>Lower Bracket</p>
         </div>
 
         <p className="col-start-1 row-start-3 self-center text-center">1</p>
@@ -190,7 +194,7 @@ export default function Bracket() {
         <AllianceCell coords={[15, 19, 18, 18]} teams={teams.m14 as any} winnerIdx={winners.m14} onMatchResult={(i) => updateMatch('m14', i)} />
       </div>
       <div className="mt-4 flex justify-center bg-black">
-        <button type="submit" className="px-12 py-3 font-bold rounded shadow-lg transition-all text-lg uppercase tracking-wider">
+        <button type="submit" id='submitButton' className="px-12 py-3 font-bold rounded shadow-lg transition-all text-lg uppercase tracking-wider">
           Submit Entry
         </button>
       </div>
