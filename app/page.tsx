@@ -98,6 +98,7 @@ export default function Bracket() {
       button.disabled = true
     }
     try {
+        await Submit(submissionData);
         console.log("submitted");
         setUserName("");
         setTeams({
