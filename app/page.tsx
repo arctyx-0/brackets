@@ -14,7 +14,7 @@ async function Submit(submissionData: { user: any; bracket: any; }) {
 
 export default function Bracket() {
   const [userName, setUserName] = useState("");
-  const [teams, setTeams] = useState({
+  const [teams, setTeams] = useState<Record<string, [string | null, string | null]>>({
     m1: ["A1", "A8"], m2: ["A4", "A5"], m3: ["A2", "A7"], m4: ["A3", "A6"],
     m5: [null, null], m6: [null, null], m7: [null, null], m8: [null, null],
     m9: [null, null], m10: [null, null], m11: [null, null], m12: [null, null],
@@ -94,7 +94,7 @@ export default function Bracket() {
         m5: [null, null], m6: [null, null], m7: [null, null], m8: [null, null],
         m9: [null, null], m10: [null, null], m11: [null, null], m12: [null, null],
         m13: [null, null], m14: [null, null]
-      });
+      } as Record<string, [string | null, string | null]>);
       setWinners({
         m1: null, m2: null, m3: null, m4: null, m5: null, m6: null, m7: null,
         m8: null, m9: null, m10: null, m11: null, m12: null, m13: null, m14: null
