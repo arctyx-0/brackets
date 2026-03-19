@@ -72,7 +72,7 @@ export default function Bracket() {
     const winnerNext = flow.winnerNext;
     const loserNext = flow.loserNext;
 
-    updateMatch(matchId, teamIdx, winnerNext, loserNext);
+    updateMatch(matchId, teamIdx, winnerNext ?? undefined, loserNext ?? undefined);
   };
 
   const handleSubmit = async (e: FormEvent) => {
