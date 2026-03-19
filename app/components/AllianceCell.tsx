@@ -30,15 +30,15 @@ const AllianceCell: React.FC<AllianceCellProps> = ({
   // Determine button styling based on correctness vs key bracket
   const getButtonClass = (buttonIdx: number) => {
     const isSelected = winnerIdx === buttonIdx;
-    const isCorrect = keyWinnerIdx !== null && keyWinnerIdx !== undefined &&
-                      keyWinnerIdx === buttonIdx && isSelected;
-    const isWrong = keyWinnerIdx !== null && keyWinnerIdx !== undefined &&
-                    keyWinnerIdx !== buttonIdx && isSelected;
-
+    const hasKey = keyWinnerIdx !== null && keyWinnerIdx !== undefined;
+    const isCorrect = hasKey && keyWinnerIdx === buttonIdx && isSelected;
+    const isWrong = hasKey && keyWinnerIdx !== buttonIdx && isSelected;
     if (isCorrect) {
       return 'bg-green-600 border-white font-bold';
     } else if (isWrong) {
       return 'bg-red-600 border-white font-bold';
+    } else if (isSelected) {
+      return 'bg-green-600 border-white font-bold';
     } else if (readOnly) {
       return 'border-zinc-700 text-white';
     } else {
