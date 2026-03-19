@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { db } from "../components/firebase";
 import { collection, query, getDocs } from "firebase/firestore";
+import BracketModal from "../components/BracketModal";
 
 interface BracketData {
   name: string;
@@ -11,9 +12,18 @@ interface BracketData {
   };
 }
 
+interface StatsData {
+  name: string;
+  score: number;
+  total: number;
+  accuracy: number;
+}
+
 export default function Leaderboard() {
   const [entries, setEntries] = useState<BracketData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBracket, setSelectedBracket] = useState<BracketData | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +33,7 @@ export default function Leaderboard() {
         const data = querySnapshot.docs.map(doc => doc.data() as BracketData);
         setEntries(data);
         setLoading(false);
-        console.log(data)
+        console.log(data);
       } catch (err) {
         console.error("Fetch error:", err);
       }
@@ -31,13 +41,13 @@ export default function Leaderboard() {
     fetchData();
   }, []);
 
-  const { stats, keyFound } = useMemo(() => {
-    const sortedEntries = [...entries].sort((a: any, b: any) => 
-        (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0)
+  const { stats, keyFound, keyBracketData } = useMemo(() => {
+    const sortedEntries = [...entries].sort((a: any, b: any) =>
+      (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0)
     );
     const keyBracket = sortedEntries.find(e => e.name?.toLowerCase() === "key");
-    
-    if (!keyBracket) return { stats: [], keyFound: false };
+
+    if (!keyBracket) return { stats: [] as StatsData[], keyFound: false, keyBracketData: undefined };
 
     const computedStats = entries
       .filter(e => e.name?.toLowerCase() !== "key")
@@ -63,8 +73,16 @@ export default function Leaderboard() {
       })
       .sort((a, b) => b.accuracy - a.accuracy);
 
-    return { stats: computedStats, keyFound: true };
+    return { stats: computedStats, keyFound: true, keyBracketData: keyBracket?.bracket };
   }, [entries]);
+
+  const handleNameClick = (name: string) => {
+    const entry = entries.find(e => e.name === name);
+    if (entry) {
+      setSelectedBracket(entry);
+      setIsModalOpen(true);
+    }
+  };
 
   if (loading) return <div className="text-white p-10 font-mono">Loading...</div>;
 
@@ -107,7 +125,14 @@ export default function Leaderboard() {
             {stats.map((user, index) => (
               <tr key={index} className="border-b border-zinc-900 group hover:bg-zinc-900/30">
                 <td className="py-4 px-4 font-mono text-zinc-600">#{index + 1}</td>
-                <td className="py-4 px-4 font-semibold">{user.name}</td>
+                <td className="py-4 px-4">
+                  <button
+                    onClick={() => handleNameClick(user.name)}
+                    className="font-semibold text-white hover:text-blue-400 hover:underline transition-colors cursor-pointer text-left"
+                  >
+                    {user.name}
+                  </button>
+                </td>
                 <td className="py-4 px-4 font-mono text-sm">{user.score}/{user.total}</td>
                 <td className="py-4 px-4">
                   <span className="font-mono text-blue-400">{user.accuracy.toFixed(1)}%</span>
@@ -117,6 +142,14 @@ export default function Leaderboard() {
           </tbody>
         </table>
       </div>
+
+      <BracketModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        name={selectedBracket?.name || ""}
+        bracket={selectedBracket?.bracket || { teams: {}, winners: {}}}
+        keyBracket={keyBracketData}
+      />
     </div>
   );
 }
