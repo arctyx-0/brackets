@@ -119,6 +119,13 @@ export default function Bracket() {
           placeholder="Enter your name..."
           className="bg-zinc-800 border border-zinc-600 px-4 py-2 rounded focus:outline-none focus:border-blue-500 w-64"
         />
+        <button
+        type="button"
+        onClick={() => window.location.assign("/bracketResults")}
+        className="px-12 py-3 font-bold rounded shadow-lg transition-all text-lg uppercase tracking-wider bg-zinc-700 hover:bg-zinc-600 text-white"
+        >
+        View Results
+        </button>
       </div>
 
       <BracketDisplay
@@ -127,8 +134,8 @@ export default function Bracket() {
         onMatchResult={handleUpdateMatch}
         readOnly={false}
       />
-      <div className="mt-4 flex justify-center bg-black">
-        <button type="submit" id='submitButton' className="px-12 py-3 font-bold rounded shadow-lg transition-all text-lg uppercase tracking-wider">
+      <div className="mt-4 flex justify-center bg-black gap-4">
+        <button type="submit" id='submitButton' className="px-12 py-3 font-bold rounded shadow-lg transition-all text-lg uppercase tracking-wider bg-blue-600 hover:bg-blue-700">
           Submit Entry
         </button>
       </div>
