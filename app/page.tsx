@@ -36,7 +36,7 @@ export default function Bracket() {
     if (nextWinner) {
       setTeams(prev => {
         const currentValue = (prev as any)[nextWinner[0]] as [any, any] | undefined;
-        const next = currentValue ? [currentValue[0], currentValue[1]] : [null, null];
+        const next: [string | null, string | null] = currentValue ? [currentValue[0], currentValue[1]] : [null, null];
         next[nextWinner[1]] = winVal;
         const result = { ...prev };
         result[nextWinner[0]] = next;
@@ -47,7 +47,7 @@ export default function Bracket() {
     if (nextLoser) {
       setTeams(prev => {
         const currentValue = (prev as any)[nextLoser[0]] as [any, any] | undefined;
-        const next = currentValue ? [currentValue[0], currentValue[1]] : [null, null];
+        const next: [string | null, string | null] = currentValue ? [currentValue[0], currentValue[1]] : [null, null];
         next[nextLoser[1]] = loseVal;
         const result = { ...prev };
         result[nextLoser[0]] = next;
