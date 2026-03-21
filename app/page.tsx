@@ -122,7 +122,7 @@ export default function Bracket() {
           required
           value={userName}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
-          placeholder="Enter your name..."
+          placeholder="Enter your name + team number..."
           className="bg-zinc-800 border border-zinc-600 px-4 py-2 rounded focus:outline-none focus:border-blue-500 w-64"
         />
         <button
