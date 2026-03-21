@@ -38,7 +38,9 @@ export default function Bracket() {
         const currentValue = (prev as any)[nextWinner[0]] as [any, any] | undefined;
         const next = currentValue ? [currentValue[0], currentValue[1]] : [null, null];
         next[nextWinner[1]] = winVal;
-        return { ...prev, [nextWinner[0]]: next };
+        const result = { ...prev };
+        result[nextWinner[0]] = next;
+        return result;
       });
     }
 
@@ -47,7 +49,9 @@ export default function Bracket() {
         const currentValue = (prev as any)[nextLoser[0]] as [any, any] | undefined;
         const next = currentValue ? [currentValue[0], currentValue[1]] : [null, null];
         next[nextLoser[1]] = loseVal;
-        return { ...prev, [nextLoser[0]]: next };
+        const result = { ...prev };
+        result[nextLoser[0]] = next;
+        return result;
       });
     }
   };
@@ -122,11 +126,11 @@ export default function Bracket() {
           className="bg-zinc-800 border border-zinc-600 px-4 py-2 rounded focus:outline-none focus:border-blue-500 w-64"
         />
         <button
-        type="button"
-        onClick={() => window.location.assign("/bracketResults")}
-        className="px-12 py-3 font-bold rounded shadow-lg transition-all text-lg uppercase tracking-wider bg-zinc-700 hover:bg-zinc-600 text-white"
+          type="button"
+          onClick={() => window.location.assign("/bracketResults")}
+          className="px-12 py-3 font-bold rounded shadow-lg transition-all text-lg uppercase tracking-wider bg-zinc-700 hover:bg-zinc-600 text-white"
         >
-        View Results
+          View Results
         </button>
       </div>
 
