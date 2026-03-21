@@ -33,7 +33,7 @@ export default function Bracket() {
 
     setWinners(prev => ({ ...prev, [matchId]: winIdx }));
 
-    if (nextWinner) {
+    if (nextWinner && nextWinner[0] !== '') {
       setTeams(prev => {
         const currentValue = (prev as any)[nextWinner[0]] as [any, any] | undefined;
         const next: [string | null, string | null] = currentValue ? [currentValue[0], currentValue[1]] : [null, null];
@@ -44,7 +44,7 @@ export default function Bracket() {
       });
     }
 
-    if (nextLoser) {
+    if (nextLoser && nextLoser[0] !== '') {
       setTeams(prev => {
         const currentValue = (prev as any)[nextLoser[0]] as [any, any] | undefined;
         const next: [string | null, string | null] = currentValue ? [currentValue[0], currentValue[1]] : [null, null];
