@@ -5,11 +5,12 @@ import { collection, addDoc } from "firebase/firestore";
 import BracketDisplay from "./components/BracketDisplay";
 
 async function Submit(submissionData: { user: any; bracket: any; }) {
-  await addDoc(collection(db, "brackets"), {
+  return;
+  /* await addDoc(collection(db, "brackets"), {
     name: submissionData.user,
     bracket: submissionData.bracket,
     createdAt: new Date()
-  });
+  }); */
 }
 
 export default function Bracket() {
