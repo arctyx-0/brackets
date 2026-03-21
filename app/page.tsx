@@ -6,11 +6,11 @@ import BracketDisplay from "./components/BracketDisplay";
 
 async function Submit(submissionData: { user: any; bracket: any; }) {
   return;
-  /* await addDoc(collection(db, "brackets"), {
+  await addDoc(collection(db, "brackets"), {
     name: submissionData.user,
     bracket: submissionData.bracket,
     createdAt: new Date()
-  }); */
+  });
 }
 
 export default function Bracket() {
