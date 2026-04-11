@@ -117,7 +117,7 @@ export default function Bracket() {
       m7: { winnerNext: ['m12', 0] as [string, number], loserNext: null },
       m8: { winnerNext: ['m12', 1] as [string, number], loserNext: null },
       m11: { winnerNext: ['m14', 0] as [string, number], loserNext: ['m13', 0] as [string, number] },
-      m12: { winnerNext: ['', 0] as [string, number], loserNext: ['m13', 1] as [string, number] },
+      m12: { winnerNext: ['m13', 1] as [string, number], loserNext: ['', 0] as [string, number] },
       m13: { winnerNext: ['m14', 1] as [string, number], loserNext: null },
       m14: { winnerNext: null, loserNext: null }
     };
