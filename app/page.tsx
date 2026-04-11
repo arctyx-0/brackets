@@ -1,8 +1,10 @@
 'use client';
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import { db } from "./components/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, query, getDocs } from "firebase/firestore";
 import BracketDisplay from "./components/BracketDisplay";
+
+const COMP_ID = "2026pncmp";
 
 async function Submit(submissionData: { user: any; bracket: any; }) {
   await addDoc(collection(db, "brackets"), {
@@ -25,6 +27,52 @@ export default function Bracket() {
     m1: null, m2: null, m3: null, m4: null, m5: null, m6: null, m7: null,
     m8: null, m9: null, m10: null, m11: null, m12: null, m13: null, m14: null
   });
+
+  const [alliances, setAlliances] = useState<Array<{allianceNumber: number; teams: string[]}>>([]);
+  const [alliancesLoading, setAlliancesLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAlliances = async () => {
+      try {
+        console.log("Fetching alliances for competition ID:", COMP_ID);
+
+        const alliancesRef = collection(db, "alliances");
+        const q = query(alliancesRef);
+        const querySnapshot = await getDocs(q);
+
+        console.log(`Found ${querySnapshot.size} documents in alliances collection`);
+
+        const allAlliances: Array<{allianceNumber: number; teams: string[]}> = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          console.log("Document:", doc.id, "Data:", JSON.stringify(data, null, 2));
+
+          // Check if data matches expected structure
+          if (data.compId === COMP_ID && data.alliances) {
+            console.log(`Document ${doc.id} matches compId ${COMP_ID}`);
+            data.alliances.forEach((alliance: any) => {
+              console.log(`Found alliance ${alliance.allianceNumber} with teams:`, alliance.teams);
+              allAlliances.push({
+                allianceNumber: alliance.allianceNumber,
+                teams: alliance.teams || []
+              });
+            });
+          } else {
+            console.log(`Document ${doc.id} does NOT match - compId: ${data.compId}, has alliances field: ${!!data.alliances}`);
+          }
+        });
+
+        console.log(`Total alliances found for ${COMP_ID}: ${allAlliances.length}`);
+        setAlliances(allAlliances.sort((a, b) => a.allianceNumber - b.allianceNumber));
+        setAlliancesLoading(false);
+      } catch (err) {
+        console.error("Error fetching alliances:", err);
+        setAlliancesLoading(false);
+      }
+    };
+
+    fetchAlliances();
+  }, []);
 
   const updateMatch = (matchId: string, winIdx: number, nextWinner?: [string, number], nextLoser?: [string, number]) => {
     const currentTeams = (teams as any)[matchId];
@@ -69,7 +117,7 @@ export default function Bracket() {
       m7: { winnerNext: ['m12', 0] as [string, number], loserNext: null },
       m8: { winnerNext: ['m12', 1] as [string, number], loserNext: null },
       m11: { winnerNext: ['m14', 0] as [string, number], loserNext: ['m13', 0] as [string, number] },
-      m12: { winnerNext: ['m13', 1] as [string, number], loserNext: null },
+      m12: { winnerNext: ['', 0] as [string, number], loserNext: ['m13', 1] as [string, number] },
       m13: { winnerNext: ['m14', 1] as [string, number], loserNext: null },
       m14: { winnerNext: null, loserNext: null }
     };
@@ -114,6 +162,36 @@ export default function Bracket() {
 
   return (
     <form onSubmit={handleSubmit} className="h-screen w-screen bg-black text-white p-4 flex flex-col">
+      {/* Alliance Display Section */}
+      <div className="mb-6 p-4 bg-zinc-900 rounded-lg border border-zinc-700">
+        <h2 className="text-2xl font-bold mb-4 text-white">Alliances</h2>
+        {alliancesLoading ? (
+          <div className="text-zinc-400">Loading alliances...</div>
+        ) : alliances.length === 0 ? (
+          <div className="text-zinc-400">No alliances found</div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {alliances.map((alliance) => (
+              <div key={alliance.allianceNumber} className="bg-zinc-800 p-3 rounded border border-zinc-600">
+                <div className="font-bold text-blue-400 mb-2">Alliance {alliance.allianceNumber}</div>
+                <div className="space-y-1">
+                  {alliance.teams.length > 0 ? (
+                    alliance.teams.map((team, idx) => (
+                      <div key={idx} className="text-sm text-zinc-300">
+                        Team {team}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-sm text-zinc-500">No teams</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Name field */}
       <div className="mb-4 flex items-center gap-4">
         <label htmlFor="userName" className="text-xl font-bold">Name:</label>
         <input
@@ -122,7 +200,7 @@ export default function Bracket() {
           required
           value={userName}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
-          placeholder="Enter your name + team number..."
+          placeholder="Enter your name..."
           className="bg-zinc-800 border border-zinc-600 px-4 py-2 rounded focus:outline-none focus:border-blue-500 w-64"
         />
         <button
